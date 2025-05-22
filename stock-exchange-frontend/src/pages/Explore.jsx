@@ -1,4 +1,4 @@
-import { AppBar,Toolbar, Typography,Link,Box ,Button, Container,Grid,Card,Stack} from '@mui/material'
+import { AppBar,Toolbar, Typography,Link,Box ,Button, Container,Grid,Card,Stack, TextField} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import {  Link as RouterLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,9 @@ const Explore = () => {
 
   const webSocketHandler= useWebSocket();
   const userId = localStorage.getItem("user_id");
+
+  const [tickerform,setTickerform] = useState('')
+  const [nameform,setNameform] = useState('')
 
   useEffect(()=> {
     const fetchStockData = async() =>{
@@ -75,6 +78,28 @@ const Explore = () => {
   }
   const handlesubmit_profile = () => {
     navigate("/profile")
+  }
+
+  const handleCreateTicker = async () => {
+    if(!tickerform || !nameform){
+      alert("Please fill all the fields");
+      return;
+    }
+
+    try{
+      await exploreService.createTicker({
+        ticker: tickerform.trim(),
+        stock_name: nameform.trim()
+      });
+      setNameform('')
+      setTickerform('')
+    }
+    catch(err){
+      console.error("at err of creating ticker",err);
+      alert("Error creating ticker");
+    }
+
+    
   }
 
   
@@ -254,6 +279,7 @@ const Explore = () => {
             return (
             <Card 
               key = {t}
+              onClick = {() => navigate(`/stock/${t}`)}
               sx={{
                 
                 minHeight : "10px",
@@ -319,8 +345,68 @@ const Explore = () => {
             );})}
 
           </Stack>
-
+          
       </Container>
+      
+      </Box>
+
+      <Box
+      sx={{
+        marginTop : "200px",
+        marginLeft:"350px",
+        display : "flex",
+       // minWidth:"750px",
+        flexDirection: 'column'
+      }}
+      ><Typography
+      variant='h6' color='white'
+      > 
+      Create New Ticker
+      </Typography>
+      
+      <TextField
+      label = 'Ticker'
+        variant = 'filled'
+        required
+        fullWidth
+        value={tickerform}
+        onChange = {e => setTickerform(e.target.value)}
+        InputLabelProps={{ sx: { color: 'lightgray' } }}
+          InputProps={{ sx: { backgroundColor: '#3A3A3A', color: 'white' } }}
+      >
+        
+
+      </TextField>
+
+      <TextField
+      label = 'Stock Name'
+        variant = 'filled'
+        required
+        fullWidth
+        value={nameform}
+        onChange = {e => setNameform(e.target.value)}
+        InputLabelProps={{ sx: { color: 'lightgray' } }}
+          InputProps={{ sx: { backgroundColor: '#3A3A3A', color: 'white' } }}
+      >
+        
+
+      </TextField>
+
+      <Button
+      variant='contained'
+      onClick = {handleCreateTicker}
+      sx = {{
+       // alignSelf: 'flex-start',
+        fontWeight: 'bold', textTransform: 'none'
+
+      }}
+
+      >
+        Submit
+      </Button>
+
+      
+
       </Box>
 
     </div>

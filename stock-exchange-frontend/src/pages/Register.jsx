@@ -58,6 +58,7 @@ const Register = () => {
                 try{
                     const data_login= await authService.login({email,password});
                     localStorage.setItem('access_token', data_login.access_token);
+                    localStorage.setItem('user_id',data_login.user_id);
                     navigate("/explore");
                 }
                 catch (error) {

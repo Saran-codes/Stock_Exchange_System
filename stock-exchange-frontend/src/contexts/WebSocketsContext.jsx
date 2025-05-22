@@ -10,7 +10,7 @@ export const WebSocketProvider = ({children}) =>{
 
     useEffect(() => {
         const token = localStorage.getItem("access_token");
-        const userId= localStorage.getItem("user_id");
+        
 
         // if (!token || !userId) {
         //     console.log('No token or user_id found. Skipping WebSocket connection.');
@@ -20,12 +20,14 @@ export const WebSocketProvider = ({children}) =>{
         webSocketHandler.connect();
 
         const unsubscribe = webSocketHandler.subscribe((data)=>{
-
-            if(data.event_type==='notification'){
+            //const userId= localStorage.getItem("user_id");
+            //console.log('WebSocket data received:', data,userId);
+            if( data.event_type==='notification' ){
                 console.log(data);
                 showNotification({
                     order_id: data.order_id,
                     order_status: data.order_status,
+                    user_id: data.user_id,
                     executed_price: data.executed_price,
                     executed_quantity: data.executed_quantity,
 

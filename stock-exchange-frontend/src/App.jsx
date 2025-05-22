@@ -6,6 +6,9 @@ import React from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Explore from './pages/Explore';
+import StockPage from './pages/StockPage';
+import OrderHistory from './pages/OrderHistory';
+import Portfolio from './pages/Portfolio';
 import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom';
 import NotificationProvider from './contexts/NotificationContext';
 import WebSocketProvider from './contexts/WebSocketsContext'; 
@@ -22,6 +25,9 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path='/explore' element = {<Explore />}/>
+      <Route path="/stock/:ticker" element={<StockPage />} />
+      <Route path="/order_history" element={<OrderHistory />} />
+      <Route path="/portfolio" element={<Portfolio />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   </BrowserRouter>

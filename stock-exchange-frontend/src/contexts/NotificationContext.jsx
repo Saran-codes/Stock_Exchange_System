@@ -6,14 +6,21 @@ const NotificationContext = createContext(null);
 
 const NotificationProvider = ({children}) => {
     const [notifications,setNotifications] = useState([]);
-
+    const userId= Number(localStorage.getItem("user_id"));
 
     const showNotification = useCallback((message, severity='info') => {
         console.log(message);
-        const id= Date.now()
-        setNotifications(prev => [...prev,{id,message,severity}]);
+        setNotifications(prev => {
+                // if this order_id is already queued, skip it
+                if (prev.some(n => n.message.order_id === message.order_id)) {
+                 return prev;
+                }
+                const id = Date.now();
+                return [...prev, { id, message, severity }];
+              });
+             }, []);
 
-    },[]);
+
 
     const handleClose = useCallback((id) => {
         setNotifications(prev => prev.filter(n => n.id !== id));
@@ -33,10 +40,11 @@ const NotificationProvider = ({children}) => {
         }}
       >
         {notifications.map((notification) => (
+          notification.message.user_id=== userId && (
           <Snackbar
-            key={notification.id}
-            open={true}
-            autoHideDuration={1000}
+               key={notification.id}
+                open
+            autoHideDuration={3000}
             onClose={() => handleClose(notification.id)}
             sx={{ position: 'static' }} // Disables default positioning
           >
@@ -58,7 +66,7 @@ const NotificationProvider = ({children}) => {
               </Stack>
             </Alert>
           </Snackbar>
-        ))}
+        )))}
       </Stack>
         </NotificationContext.Provider>
     );

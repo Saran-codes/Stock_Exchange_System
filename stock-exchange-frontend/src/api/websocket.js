@@ -6,7 +6,7 @@ class WebSocketHandler{
     }
     connect() {
         // Use the IP or hostname that the browser can reach.
-        this.socket = new WebSocket("ws://127.0.0.1:8000/ws");
+        this.socket = new WebSocket("ws://192.168.137.121:8000/ws");
     
         this.socket.onopen = () => {
           console.log("WebSocket connection established.");
