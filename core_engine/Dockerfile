@@ -10,7 +10,7 @@ RUN apt-get update && \
 WORKDIR /app
 COPY src/ ./src
 
-# You no longer need -I/usr/include/librdkafka for JSON (librdkafka headers stay under their own path)
+
 RUN g++ -std=c++17 \
       src/core_engine.cpp \
       -o matching_engine \
